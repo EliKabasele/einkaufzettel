@@ -12,7 +12,6 @@ export class ItemListComponent implements OnInit, OnDestroy {
   itemsList: Item[];
   selectedItem: Item;
   itemsListSubscription: Subscription;
-  completedItem = false;
 
   constructor(private itemListService: ItemListService) {}
 
@@ -29,9 +28,7 @@ export class ItemListComponent implements OnInit, OnDestroy {
   }
 
   onCompletedItem(index: number) {
-    this.completedItem = true;
-    this.selectedItem = this.itemListService.getItem(index);
-    this.selectedItem.itemName.strike();
+    this.itemListService.deleteItem(index);
   }
 
   ngOnDestroy(): void {
