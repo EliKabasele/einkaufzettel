@@ -12,6 +12,8 @@ export class ItemListComponent implements OnInit, OnDestroy {
   itemsList: Item[];
   selectedItem: Item;
   itemsListSubscription: Subscription;
+  readyForShopSubscription: Subscription;
+  addItemMode = true;
 
   constructor(private itemListService: ItemListService) {}
 
@@ -20,7 +22,14 @@ export class ItemListComponent implements OnInit, OnDestroy {
     this.itemsListSubscription =
       this.itemListService.itemsChangedSubject.subscribe((items: Item[]) => {
         this.itemsList = items;
+        this.addItemMode = this.itemsList.length === 0 ? false : true;
       });
+
+    this.readyForShopSubscription = this.itemListService.addItemMode.subscribe(
+      (shopMode: boolean) => {
+        this.addItemMode = shopMode;
+      }
+    );
   }
 
   onEditItem(index: number) {
@@ -33,5 +42,6 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.itemsListSubscription.unsubscribe();
+    this.readyForShopSubscription.unsubscribe();
   }
 }

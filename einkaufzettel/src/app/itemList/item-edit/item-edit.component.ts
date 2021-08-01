@@ -1,5 +1,5 @@
 import { ItemListService } from './../item-list.service';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Item } from 'src/app/shared/Item';
 import { Subscription } from 'rxjs';
@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 })
 export class ItemEditComponent implements OnInit, OnDestroy {
   @ViewChild('editForm', { static: false }) editForm: NgForm;
+  @Input() itemsLisIpt: Item[];
   editedItemIndex: number;
   editMode = false;
   editedItemIndexSubscription: Subscription;
@@ -49,6 +50,10 @@ export class ItemEditComponent implements OnInit, OnDestroy {
     }
 
     this.clearForm();
+  }
+
+  goToShop() {
+    this.itemListService.addItemMode.next(false);
   }
 
   ngOnDestroy() {

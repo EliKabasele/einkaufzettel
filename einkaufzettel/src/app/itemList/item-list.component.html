@@ -25,10 +25,12 @@
           </button>
         </div>
       </li>
-      <hr />
     </ol>
 
+    <ng-container *ngIf="addItemMode || itemsList.length === 0 ">
+      <hr />
+      <app-item-edit [itemsLisIpt]="itemsList"></app-item-edit>
+    </ng-container>
 
-    <app-item-edit></app-item-edit>
   </div>
 </div>

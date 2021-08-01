@@ -9,6 +9,7 @@ export class ItemListService {
   items: Item[] = [];
   itemsChangedSubject = new Subject<Item[]>();
   itemSelectedSubject = new Subject<number>();
+  addItemMode = new Subject<boolean>();
 
   constructor() {}
 
