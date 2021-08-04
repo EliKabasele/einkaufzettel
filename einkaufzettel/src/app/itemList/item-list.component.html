@@ -1,36 +1,49 @@
 <div class="row">
   <div class="col-xs-12">
-
-    <div
-     *ngIf="itemsList.length === 0" 
-     class="alert alert-warning" role="alert"
-    >
+    <div *ngIf="itemsList.length < 1" class="alert alert-warning" role="alert">
       Your Shopping List is empty !
     </div>
 
     <ol class="list-group list-group-numbered">
       <li
-       class="list-group-item d-flex justify-content-between align-items-start"
-       *ngFor="let item of itemsList; let i = index"
+        class="list-group-item d-flex justify-content-between align-items-start"
+        *ngFor="let item of itemsList; let i = index"
       >
         <div class="ms-2 me-auto">
           <div class="fw-bold">{{ item.itemName }} ({{ item.quantity }})</div>
         </div>
         <div class="btn-group btn-group-lg" role="group">
-          <button type="button" class="btn btn-primary" >
-            <i class="bi bi-cart-check" style="font-size: 1.5rem;" (click)="onCompletedItem(i)"></i>
+          <button type="button" class="btn btn-primary">
+            <i
+              class="bi bi-cart-check"
+              style="font-size: 1.5rem"
+              (click)="onCompletedItem(i)"
+            ></i>
           </button>
           <button type="button" class="btn btn-secondary">
-            <i class="bi bi-pen" style="font-size: 1.5rem;" (click)="onEditItem(i)"></i>
+            <i
+              class="bi bi-pen"
+              style="font-size: 1.5rem"
+              (click)="onEditItem(i)"
+            ></i>
           </button>
         </div>
       </li>
     </ol>
 
-    <ng-container *ngIf="addItemMode || itemsList.length === 0 ">
+    <button
+      [disabled]="!addItemMode || itemsList.length < 1"
+      *ngIf="itemsList.length >= 1"
+      type="button"
+      class="btn btn-primary"
+      (click)="onSaveList()"
+    >
+      Save the List
+    </button>
+
+    <ng-container *ngIf="addItemMode || itemsList.length < 1">
       <hr />
       <app-item-edit [itemsLisIpt]="itemsList"></app-item-edit>
     </ng-container>
-
   </div>
 </div>

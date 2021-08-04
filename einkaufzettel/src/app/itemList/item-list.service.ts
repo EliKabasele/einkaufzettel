@@ -17,6 +17,11 @@ export class ItemListService {
     return this.items.slice();
   }
 
+  setItems(items: Item[]) {
+    this.items = items != null ? items : [];
+    this.itemsChangedSubject.next(this.getItems());
+  }
+
   getItem(index: number) {
     return this.items[index];
   }

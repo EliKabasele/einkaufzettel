@@ -1,3 +1,4 @@
+import { DataStorageService } from './../shared/data-storage.service';
 import { ItemListService } from './item-list.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Item } from '../shared/Item';
@@ -9,27 +10,35 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./item-list.component.scss'],
 })
 export class ItemListComponent implements OnInit, OnDestroy {
-  itemsList: Item[];
+  itemsList: Item[] = [];
   selectedItem: Item;
   itemsListSubscription: Subscription;
   readyForShopSubscription: Subscription;
   addItemMode = true;
 
-  constructor(private itemListService: ItemListService) {}
+  constructor(
+    private itemListService: ItemListService,
+    private dataStorageService: DataStorageService
+  ) {}
 
   ngOnInit(): void {
-    this.itemsList = this.itemListService.getItems();
-    this.itemsListSubscription =
-      this.itemListService.itemsChangedSubject.subscribe((items: Item[]) => {
-        this.itemsList = items;
-        this.addItemMode = this.itemsList.length === 0 ? false : true;
-      });
-
+    this.initializeShoppingList();
     this.readyForShopSubscription = this.itemListService.addItemMode.subscribe(
       (shopMode: boolean) => {
         this.addItemMode = shopMode;
       }
     );
+  }
+
+  private initializeShoppingList() {
+    this.itemsList = this.itemListService.getItems();
+    this.itemsListSubscription =
+      this.itemListService.itemsChangedSubject.subscribe((items: Item[]) => {
+        this.itemsList = items;
+        this.addItemMode = this.itemsList.length < 1 ? false : true;
+      });
+
+    this.dataStorageService.fetchShoppingList();
   }
 
   onEditItem(index: number) {
@@ -38,6 +47,11 @@ export class ItemListComponent implements OnInit, OnDestroy {
 
   onCompletedItem(index: number) {
     this.itemListService.deleteItem(index);
+    this.dataStorageService.deleteShoppingItem(index);
+  }
+
+  onSaveList() {
+    this.dataStorageService.saveShoppinglist();
   }
 
   ngOnDestroy(): void {
